@@ -14,11 +14,6 @@ public class NetworkConnectionManager : SceneSingleton<NetworkConnectionManager>
 
     public NetworkConnectionData CurrentConnectionData { get; set; } = new NetworkConnectionData();
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
     public async Task<bool> CreateServer(CancellationToken ct)
     {
         unetTransport.ConnectAddress = CurrentConnectionData.connectAddress;
