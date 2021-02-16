@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 102273639}
   m_Layer: 5
-  m_Name: Spacer
+  m_Name: SpacerBTN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 221006235}
   - component: {fileID: 221006234}
   m_Layer: 5
-  m_Name: Adress
+  m_Name: AdressTXT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -637,7 +637,7 @@ GameObject:
   - component: {fileID: 910989990}
   - component: {fileID: 910989989}
   m_Layer: 5
-  m_Name: Port
+  m_Name: PortTXT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1425,7 +1425,7 @@ GameObject:
   - component: {fileID: 1841503933}
   - component: {fileID: 1841503932}
   m_Layer: 5
-  m_Name: CreateServer
+  m_Name: CreateServerBTN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1546,7 +1546,7 @@ GameObject:
   - component: {fileID: 1855016927}
   - component: {fileID: 1855016926}
   m_Layer: 5
-  m_Name: ConnectClient
+  m_Name: ConnectClientBTN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
