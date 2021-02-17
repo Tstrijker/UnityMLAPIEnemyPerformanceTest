@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using MLAPI.Transports.Tasks;
 
-public class NetworkConnectionManager : SceneSingleton<NetworkConnectionManager>
+public class NetworkConnectionManager : Singleton<NetworkConnectionManager>
 {
     [SerializeField] private NetworkingManager networkingManager;
     [SerializeField] private UnetTransport unetTransport;

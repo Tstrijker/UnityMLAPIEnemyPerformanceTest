@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameFlowManager : SceneSingleton<GameFlowManager>
+public class GameFlowManager : Singleton<GameFlowManager>
 {
     [SerializeField] private string mainMenuSceneName = default;
     [SerializeField] private string gameMenuSceneName = default;
@@ -30,6 +30,9 @@ public class GameFlowManager : SceneSingleton<GameFlowManager>
         await UnloadScene(mainMenuSceneName, ct);
 
         await LoadScene(gameMenuSceneName, ct);
+
+        await EnemyManager.AsyncWaitForLoaded(ct);
+        await EnemyManager.LoadEnemiesPool(ct);
 
         await HideLoadingScene(ct);
     }
@@ -95,4 +98,5 @@ public class GameFlowManager : SceneSingleton<GameFlowManager>
     }
 
     private NetworkConnectionManager NetworkConnectionManager => NetworkConnectionManager.Instance;
+    private EnemyManager EnemyManager => EnemyManager.Instance;
 }
