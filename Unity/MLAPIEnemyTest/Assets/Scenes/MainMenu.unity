@@ -782,7 +782,9 @@ MonoBehaviour:
     RegisteredScenes:
     - MainMenu
     AllowRuntimeSceneChanges: 0
-    NetworkedPrefabs: []
+    NetworkedPrefabs:
+    - Prefab: {fileID: 2585391232709703839, guid: b81cfe9844596d940bd0e7e12dbdd4ad, type: 3}
+      PlayerPrefab: 0
     PlayerPrefabHash:
       Value: 0
     CreatePlayerPrefab: 0
