@@ -10,10 +10,18 @@ public class EnemyManager : SceneSingleton<EnemyManager>
 {
     private const string ENEMY_SCENE_NAME = "Enemies";
 
-    [SerializeField] private int poolSize = 100;
     [SerializeField] private Enemy enemyPrefab = default;
+    [SerializeField] private int poolSize = 100;
+    [SerializeField] private Bounds spawnAreaSize = default;
 
     private Scene enemyScene;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        enemyScene = SceneManager.CreateScene(ENEMY_SCENE_NAME);
+    }
 
     protected override void OnDestroy()
     {
@@ -24,18 +32,22 @@ public class EnemyManager : SceneSingleton<EnemyManager>
 
     public async UniTask LoadEnemiesPool(CancellationToken ct)
     {
-        enemyScene = SceneManager.CreateScene(ENEMY_SCENE_NAME);
-
         for (int i = 0; i < poolSize; i++)
         {
-            Enemy newEnemy = Instantiate<Enemy>(enemyPrefab);
+            Vector3 spawnPoint = spawnAreaSize.GetRandomVector3();
+            Quaternion rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
+
+            Enemy newEnemy = Instantiate<Enemy>(enemyPrefab, spawnPoint, rotation);
 
             newEnemy.NetworkedObject.Spawn();
 
-            SceneManager.MoveGameObjectToScene(newEnemy.gameObject, enemyScene);
-
             await UniTask.NextFrame().WithCancellation(ct);
         }
+    }
+
+    public void MoveObjectToGameScene(GameObject gameObject)
+    {
+        SceneManager.MoveGameObjectToScene(gameObject, enemyScene);
     }
 
     private void UnloadEnemyPool()

@@ -10,7 +10,9 @@ public class Enemy : NetworkedBehaviour
     private void Awake()
     {
         enemyMover = new EnemyMover();
+
+        EnemyManager.MoveObjectToGameScene(gameObject);
     }
 
-
+    private EnemyManager EnemyManager => EnemyManager.Instance;
 }
