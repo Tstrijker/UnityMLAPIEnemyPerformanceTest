@@ -14,7 +14,7 @@ public class EnemyManager : SceneSingleton<EnemyManager>
     [SerializeField] private int poolSize = 100;
     [SerializeField] private Bounds spawnAreaSize = default;
 
-    private Scene enemyScene;
+    private Scene? enemyScene;
 
     protected override void Awake()
     {
@@ -34,7 +34,7 @@ public class EnemyManager : SceneSingleton<EnemyManager>
     {
         for (int i = 0; i < poolSize; i++)
         {
-            Vector3 spawnPoint = spawnAreaSize.GetRandomVector3();
+            Vector3 spawnPoint = GetRandomSpawnAreaPoint();
             Quaternion rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
 
             Enemy newEnemy = Instantiate<Enemy>(enemyPrefab, spawnPoint, rotation);
@@ -47,11 +47,16 @@ public class EnemyManager : SceneSingleton<EnemyManager>
 
     public void MoveObjectToGameScene(GameObject gameObject)
     {
-        SceneManager.MoveGameObjectToScene(gameObject, enemyScene);
+        SceneManager.MoveGameObjectToScene(gameObject, enemyScene.Value);
+    }
+
+    public Vector3 GetRandomSpawnAreaPoint()
+    {
+        return spawnAreaSize.GetRandomVector3();
     }
 
     private void UnloadEnemyPool()
     {
-        SceneManager.UnloadSceneAsync(enemyScene);
+        SceneManager.UnloadSceneAsync(enemyScene.Value);
     }
 }
