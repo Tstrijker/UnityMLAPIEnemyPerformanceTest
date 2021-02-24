@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 56751081}
   m_Layer: 0
-  m_Name: ------------------- (1)
+  m_Name: -------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -823,11 +823,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78fab884cb8bc3e48a638ad83f61e74a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2725135351301487652, guid: b81cfe9844596d940bd0e7e12dbdd4ad, type: 3}
-  poolSize: 100
+  enemyMLAPIPredictionMovementPrefab: {fileID: 2725135351301487652, guid: eaaa6a75cf9877d4b9f3919880cc52d7, type: 3}
+  enemySinglePredictionMovementPrefab2: {fileID: 2725135351301487652, guid: b81cfe9844596d940bd0e7e12dbdd4ad, type: 3}
+  enemyGroupedPredictionMovementPrefab3: {fileID: 2725135351301487652, guid: 76a8cbaff1e41124d80eff90afa12808, type: 3}
+  poolSize: 25
   spawnAreaSize:
     m_Center: {x: 0, y: 1, z: 0}
     m_Extent: {x: 80, y: 0, z: 50}
+  movementPredictionManagerPrefab: {fileID: 2360359483314025192, guid: 4d5f6d51a74f259468f9a191c5baec22, type: 3}
 --- !u!4 &1077061504
 Transform:
   m_ObjectHideFlags: 0

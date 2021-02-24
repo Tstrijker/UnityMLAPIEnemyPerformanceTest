@@ -13,7 +13,7 @@ public class GameFlowManager : Singleton<GameFlowManager>
 
     private CancellationTokenSource cts = new CancellationTokenSource();
 
-    public async void StartServerGame()
+    public async void StartServerGame(MovementPredictionTypes movementPredictionType)
     {
         CancellationToken ct = cts.Token;
 
@@ -32,7 +32,7 @@ public class GameFlowManager : Singleton<GameFlowManager>
         await LoadScene(gameMenuSceneName, ct);
 
         await EnemyManager.AsyncWaitForLoaded(ct);
-        await EnemyManager.LoadEnemiesPool(ct);
+        await EnemyManager.LoadEnemiesPool(movementPredictionType, ct);
 
         await HideLoadingScene(ct);
     }

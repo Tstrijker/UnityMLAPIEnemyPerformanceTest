@@ -14,14 +14,29 @@ public class MainMenuViewController : MonoBehaviour
         portInput.text = NetworkConnectionManager.CurrentConnectionData.connectPort.ToString();
     }
 
-    public void CreateServerGameOnClick()
+    public void CreateServerGameMLAPIPredictionMovementOnClick()
+    {
+        CreateServerGame(MovementPredictionTypes.MLAPIPredictionMovement);
+    }
+
+    public void CreateServerGameSinglePredictionMovementOnClick()
+    {
+        CreateServerGame(MovementPredictionTypes.SinglePredictionMovement);
+    }
+
+    public void CreateServerGameGroupedPredictionMovementOnClick()
+    {
+        CreateServerGame(MovementPredictionTypes.GroupedPredictionMovement);
+    }
+
+    private void CreateServerGame(MovementPredictionTypes movementPredictionType)
     {
         string connectAddress = addressInput.text;
         int connectPort = int.Parse(portInput.text);
 
         NetworkConnectionManager.CurrentConnectionData = new NetworkConnectionData(connectAddress, connectPort);
 
-        GameFlowManager.StartServerGame();
+        GameFlowManager.StartServerGame(movementPredictionType);
     }
 
     public void CreateClientGameOnClick()

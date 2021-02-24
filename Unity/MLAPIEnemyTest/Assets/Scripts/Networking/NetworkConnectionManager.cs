@@ -18,7 +18,7 @@ public class NetworkConnectionManager : Singleton<NetworkConnectionManager>
     {
         unetTransport.ConnectAddress = CurrentConnectionData.connectAddress;
         unetTransport.ServerListenPort = CurrentConnectionData.connectPort;
-
+ 
         SocketTasks socketTasks = networkingManager.StartHost();
 
         await socketTasks.IsDoneAsync(ct);

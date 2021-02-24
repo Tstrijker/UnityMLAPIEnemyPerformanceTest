@@ -10,18 +10,14 @@ public class EnemyManager : SceneSingleton<EnemyManager>
 {
     private const string ENEMY_SCENE_NAME = "Enemies";
 
-    [SerializeField] private Enemy enemyPrefab = default;
+    [SerializeField] private Enemy enemyMLAPIPredictionMovementPrefab = default;
+    [SerializeField] private Enemy enemySinglePredictionMovementPrefab2 = default;
+    [SerializeField] private Enemy enemyGroupedPredictionMovementPrefab3 = default;
     [SerializeField] private int poolSize = 100;
     [SerializeField] private Bounds spawnAreaSize = default;
+    [SerializeField] private MovementPredictionManager movementPredictionManagerPrefab = default;
 
-    private Scene? enemyScene;
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        enemyScene = SceneManager.CreateScene(ENEMY_SCENE_NAME);
-    }
+    private static Scene? enemyScene;
 
     protected override void OnDestroy()
     {
@@ -30,8 +26,28 @@ public class EnemyManager : SceneSingleton<EnemyManager>
         base.OnDestroy();
     }
 
-    public async UniTask LoadEnemiesPool(CancellationToken ct)
+    public async UniTask LoadEnemiesPool(MovementPredictionTypes movementPredictionType, CancellationToken ct)
     {
+        Enemy enemyPrefab = null;
+
+        switch (movementPredictionType)
+        {
+            case MovementPredictionTypes.MLAPIPredictionMovement:
+                enemyPrefab = enemyMLAPIPredictionMovementPrefab;
+                break;
+
+            case MovementPredictionTypes.SinglePredictionMovement:
+                enemyPrefab = enemySinglePredictionMovementPrefab2;
+                break;
+
+            case MovementPredictionTypes.GroupedPredictionMovement:
+                MovementPredictionManager movementPredictionManager = Instantiate(movementPredictionManagerPrefab);
+                movementPredictionManager.NetworkedObject.Spawn();
+
+                enemyPrefab = enemyGroupedPredictionMovementPrefab3;
+                break;
+        }
+
         for (int i = 0; i < poolSize; i++)
         {
             Vector3 spawnPoint = GetRandomSpawnAreaPoint();
@@ -45,8 +61,11 @@ public class EnemyManager : SceneSingleton<EnemyManager>
         }
     }
 
-    public void MoveObjectToGameScene(GameObject gameObject)
+    public static void MoveObjectToGameScene(GameObject gameObject)
     {
+        if (enemyScene == null)
+            enemyScene = SceneManager.CreateScene(ENEMY_SCENE_NAME);
+
         SceneManager.MoveGameObjectToScene(gameObject, enemyScene.Value);
     }
 

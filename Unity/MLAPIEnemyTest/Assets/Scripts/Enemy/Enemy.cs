@@ -13,11 +13,6 @@ public class Enemy : NetworkedBehaviour
     {
         if (IsServer)
             enemyMover.Setup(transform);
-    }
-
-    private IEnumerator Start()
-    {
-        yield return EnemyManager.WaitForLoaded();
 
         EnemyManager.MoveObjectToGameScene(gameObject);
     }
@@ -26,20 +21,11 @@ public class Enemy : NetworkedBehaviour
     {
         if (IsServer)
             ServerUpdate();
-        else
-            ClientUpdate();
     }
 
     private void ServerUpdate()
     {
         enemyMover.Update();
-
-        
-    }
-
-    private void ClientUpdate()
-    {
-        
     }
 
     private EnemyManager EnemyManager => EnemyManager.Instance;
