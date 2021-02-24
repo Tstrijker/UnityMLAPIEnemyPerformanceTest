@@ -1,0 +1,1 @@
+This project is to test different methods of movement predictions and test the amount of data that is sent between a server and client for each movement prediction techniques.
