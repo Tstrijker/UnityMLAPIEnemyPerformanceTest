@@ -30,6 +30,7 @@ namespace MLAPI.Profiling
         private static int tickHistory = 1024;
         private static int EventIdCounter = 0;
         private static ProfilerTick CurrentTick;
+        private static int CurrentFrameCount;
 
         /// <summary>
         /// Starts recording data for the Profiler
@@ -101,6 +102,24 @@ namespace MLAPI.Profiling
             if (Ticks.Count == tickHistory)
                 Ticks.Dequeue();
 
+            if (CurrentFrameCount != Time.frameCount)
+            {
+                ulong totalBytesInLastFrame = 0;
+
+                for (int i = 0; i < Ticks.Count; i++)
+                {
+                    ProfilerTick previousTick = Ticks[i];
+
+                    if (previousTick.Frame == CurrentFrameCount)
+                        totalBytesInLastFrame += previousTick.Bytes;
+                }
+
+                if (totalBytesInLastFrame > 0)
+                {
+                    Debug.LogWarning($"Totale of bytes send and recieved: {totalBytesInLastFrame}B");
+                }
+            }
+
             ProfilerTick tick = new ProfilerTick()
             {
                 Type = type,
@@ -110,6 +129,8 @@ namespace MLAPI.Profiling
             EventIdCounter++;
             Ticks.Enqueue(tick);
             CurrentTick = tick;
+
+            CurrentFrameCount = Time.frameCount;
         }
 
         internal static void EndTick()
