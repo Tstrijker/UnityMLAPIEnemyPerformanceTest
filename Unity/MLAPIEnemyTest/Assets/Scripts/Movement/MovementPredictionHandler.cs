@@ -36,11 +36,11 @@ public class MovementPredictionHandler : NetworkedBehaviour
     }
 
     // Client movement cacalution
-    public void AddMovementDataToBuffer(Vector3 position, Quaternion rotation)
+    public void AddMovementDataToBuffer(float timeStamp, Vector3 position, Quaternion rotation)
     {
         MovementData movementData = new MovementData();
 
-        movementData.timeStamp = Time.time + bufferWaitTime;
+        movementData.timeStamp = timeStamp + bufferWaitTime;
         movementData.position = position;
         movementData.rotation = rotation;
 
@@ -61,10 +61,10 @@ public class MovementPredictionHandler : NetworkedBehaviour
         if (moveToData == null)
             moveToData = buffer.Dequeue();
 
-        if (Time.time < moveFromData.Value.timeStamp)
+        if (NetworkTime < moveFromData.Value.timeStamp)
             return;
 
-        if (Time.time > moveToData.Value.timeStamp)
+        if (NetworkTime > moveToData.Value.timeStamp)
         {
             if (buffer.Count == 0)
                 return;
@@ -75,7 +75,7 @@ public class MovementPredictionHandler : NetworkedBehaviour
         }
 
         float deltaMoveTime = moveToData.Value.timeStamp - moveFromData.Value.timeStamp;
-        float currentMoveTime = Time.time - moveFromData.Value.timeStamp;
+        float currentMoveTime = NetworkTime - moveFromData.Value.timeStamp;
 
         float normalMoveTime = currentMoveTime / deltaMoveTime;
 
@@ -86,4 +86,5 @@ public class MovementPredictionHandler : NetworkedBehaviour
     }
 
     private MovementPredictionManager MovementPredictionManager => MovementPredictionManager.Instance;
+    private float NetworkTime => NetworkingManager.Singleton.NetworkTime;
 }

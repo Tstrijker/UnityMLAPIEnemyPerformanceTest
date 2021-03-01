@@ -86,6 +86,7 @@ public class MovementPredictionManager : NetworkedBehaviour
                 foreach (var handler in handlers)
                 {
                     writer.WriteByte(handler.Key);
+                    writer.WriteSinglePacked(NetworkTime);
                     writer.WriteVector3Packed(handler.Value.transform.position);
                     writer.WriteRotationPacked(handler.Value.transform.rotation);
                 }
@@ -122,14 +123,15 @@ public class MovementPredictionManager : NetworkedBehaviour
             for (int i = 0; i < handlers.Count; i++)
             {
                 byte movementNetworkId = (byte)reader.ReadByte();
+                float timeStamp = reader.ReadSinglePacked();
                 Vector3 position = reader.ReadVector3Packed();
                 Quaternion rotation = reader.ReadRotationPacked();
 
                 if (handlers.ContainsKey(movementNetworkId))
-                    handlers[movementNetworkId].AddMovementDataToBuffer(position, rotation);
+                    handlers[movementNetworkId].AddMovementDataToBuffer(timeStamp, position, rotation);
             }
         }
     }
 
-    private EnemyManager EnemyManager => EnemyManager.Instance;
+    private float NetworkTime => NetworkingManager.Singleton.NetworkTime;
 }
