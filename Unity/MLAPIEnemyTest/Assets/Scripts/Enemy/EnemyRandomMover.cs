@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using MLAPI;
 
@@ -16,7 +17,14 @@ public class EnemyRandomMover : NetworkedBehaviour
     public void Awake()
     {
         minMoveNextPointDistanceSqr = minMoveNextPointDistance * minMoveNextPointDistance;
+    }
+
+    private IEnumerator Start()
+    {
+        yield return EnemyManager.WaitForLoaded();
+
         moveToPoint = EnemyManager.GetRandomSpawnAreaPoint();
+
     }
 
     private void Update()

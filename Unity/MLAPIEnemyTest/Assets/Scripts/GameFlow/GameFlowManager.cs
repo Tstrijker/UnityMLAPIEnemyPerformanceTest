@@ -7,11 +7,14 @@ using UnityEngine.SceneManagement;
 
 public class GameFlowManager : Singleton<GameFlowManager>
 {
+    private const string ENEMY_SCENE_NAME = "Enemies";
+
     [SerializeField] private string mainMenuSceneName = default;
     [SerializeField] private string gameMenuSceneName = default;
     [SerializeField] private string loadingSceneName = default;
 
     private CancellationTokenSource cts = new CancellationTokenSource();
+    private static Scene enemyScene;
 
     public async void StartServerGame(MovementPredictionTypes movementPredictionType)
     {
@@ -43,6 +46,8 @@ public class GameFlowManager : Singleton<GameFlowManager>
 
         await ShowLoadingScene(ct);
 
+        CreateEnemyPoolScene();
+
         bool connectionSuccessfull = await NetworkConnectionManager.ConnectClient(ct);
 
         if (!connectionSuccessfull)
@@ -68,6 +73,8 @@ public class GameFlowManager : Singleton<GameFlowManager>
 
         await UnloadScene(gameMenuSceneName, ct);
 
+        UnloadEnemyPoolScene();
+
         await LoadScene(mainMenuSceneName, ct);
 
         await HideLoadingScene(ct);
@@ -88,6 +95,10 @@ public class GameFlowManager : Singleton<GameFlowManager>
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 
         await operation.AsyncCompleted(ct);
+
+        Scene loadedScene = SceneManager.GetSceneByName(sceneName);
+
+        SceneManager.SetActiveScene(loadedScene);
     }
 
     private async Task UnloadScene(string sceneName, CancellationToken ct)
@@ -95,6 +106,21 @@ public class GameFlowManager : Singleton<GameFlowManager>
         AsyncOperation operation = SceneManager.UnloadSceneAsync(sceneName);
 
         await operation.AsyncCompleted(ct);
+    }
+
+    public static void MoveObjectToGameScene(GameObject gameObject)
+    {
+        SceneManager.MoveGameObjectToScene(gameObject, enemyScene);
+    }
+
+    private void CreateEnemyPoolScene()
+    {
+        enemyScene = SceneManager.CreateScene(ENEMY_SCENE_NAME);
+    }
+
+    private void UnloadEnemyPoolScene()
+    {
+        SceneManager.UnloadSceneAsync(enemyScene);
     }
 
     private NetworkConnectionManager NetworkConnectionManager => NetworkConnectionManager.Instance;

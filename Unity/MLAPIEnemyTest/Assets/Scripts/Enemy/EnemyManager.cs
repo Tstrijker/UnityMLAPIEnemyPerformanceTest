@@ -8,23 +8,12 @@ using UnityEngine.SceneManagement;
 
 public class EnemyManager : SceneSingleton<EnemyManager>
 {
-    private const string ENEMY_SCENE_NAME = "Enemies";
-
     [SerializeField] private Enemy enemyMLAPIPredictionMovementPrefab = default;
     [SerializeField] private Enemy enemySinglePredictionMovementPrefab2 = default;
     [SerializeField] private Enemy enemyGroupedPredictionMovementPrefab3 = default;
     [SerializeField] private int poolSize = 100;
     [SerializeField] private Bounds spawnAreaSize = default;
     [SerializeField] private MovementPredictionManager movementPredictionManagerPrefab = default;
-
-    private static Scene? enemyScene;
-
-    protected override void OnDestroy()
-    {
-        UnloadEnemyPool();
-
-        base.OnDestroy();
-    }
 
     public async UniTask LoadEnemiesPool(MovementPredictionTypes movementPredictionType, CancellationToken ct)
     {
@@ -61,21 +50,8 @@ public class EnemyManager : SceneSingleton<EnemyManager>
         }
     }
 
-    public static void MoveObjectToGameScene(GameObject gameObject)
-    {
-        if (enemyScene == null)
-            enemyScene = SceneManager.CreateScene(ENEMY_SCENE_NAME);
-
-        SceneManager.MoveGameObjectToScene(gameObject, enemyScene.Value);
-    }
-
     public Vector3 GetRandomSpawnAreaPoint()
     {
         return spawnAreaSize.GetRandomVector3();
-    }
-
-    private void UnloadEnemyPool()
-    {
-        SceneManager.UnloadSceneAsync(enemyScene.Value);
     }
 }
