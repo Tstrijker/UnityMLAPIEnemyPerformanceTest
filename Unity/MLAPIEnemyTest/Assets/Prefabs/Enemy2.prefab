@@ -107,6 +107,8 @@ GameObject:
   - component: {fileID: 3210753516864200833}
   - component: {fileID: 2725135351301487652}
   - component: {fileID: -6297246459530924430}
+  - component: {fileID: -4427367894227377235}
+  - component: {fileID: -3430055604607863778}
   m_Layer: 0
   m_Name: Enemy2
   m_TagString: Untagged
@@ -158,11 +160,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28aead1ae684b4a4d96f603a3dd621ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyMover:
-    moveSpeed: 10
-    rotationSpeed: 2
-    minMoveNextPointDistance: 5
 --- !u!114 &-6297246459530924430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2585391232709703839}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d21d996d4343efa42ae4a4bd74cdec1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sendRatePerSecond: 20
+  bufferWaitTime: 0.5
+  dropPackages: 0
+  dropEachPackCount: 10
+--- !u!114 &-4427367894227377235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,13 +185,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 2585391232709703839}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d21d996d4343efa42ae4a4bd74cdec1e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9460d4f4b0bc1514c8770e54a0f7dab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sendRatePerSecond: 20
   bufferWaitTime: 0.5
-  dropPackages: 1
-  dropEachPackCount: 10
+  dropPackages: 0
+  dropEachPackCount: 0
+--- !u!114 &-3430055604607863778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2585391232709703839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f5cb05494e6fad45a3f23696a37c2bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
+  rotationSpeed: 2
+  minMoveNextPointDistance: 5
 --- !u!1 &6132907129967002214
 GameObject:
   m_ObjectHideFlags: 0

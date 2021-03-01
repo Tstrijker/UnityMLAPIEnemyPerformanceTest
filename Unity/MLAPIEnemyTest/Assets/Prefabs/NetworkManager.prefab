@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3237420759792123387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3237420759792123367}
+  - component: {fileID: 3237420759792123384}
+  - component: {fileID: 3237420759792123385}
+  - component: {fileID: 3237420759792123386}
+  m_Layer: 0
+  m_Name: NetworkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3237420759792123367
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3237420759792123387}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3237420759792123384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3237420759792123387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729f887f6c34e5f4a81fcd85449230dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DontDestroy: 1
+  RunInBackground: 1
+  LogLevel: 1
+  NetworkConfig:
+    ProtocolVersion: 0
+    NetworkTransport: {fileID: 3237420759792123385}
+    RegisteredScenes:
+    - MainMenu
+    AllowRuntimeSceneChanges: 0
+    NetworkedPrefabs:
+    - Prefab: {fileID: 3669644125118404625, guid: 4d5f6d51a74f259468f9a191c5baec22, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 2585391232709703839, guid: eaaa6a75cf9877d4b9f3919880cc52d7, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 2585391232709703839, guid: b81cfe9844596d940bd0e7e12dbdd4ad, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 2585391232709703839, guid: 76a8cbaff1e41124d80eff90afa12808, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 2585391232709703839, guid: 94e4ae64fbca1e44786c073b0e072867, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 2585391232709703839, guid: 5a68ae102e57421499eb6c0c6197def5, type: 3}
+      PlayerPrefab: 0
+    PlayerPrefabHash:
+      Value: 0
+    CreatePlayerPrefab: 0
+    ReceiveTickrate: 64
+    MaxReceiveEventsPerTickRate: 500
+    EventTickrate: 64
+    MaxObjectUpdatesPerTick: -1
+    ClientConnectionBufferTimeout: 10
+    ConnectionApproval: 0
+    ConnectionData: 
+    SecondsHistory: 5
+    EnableTimeResync: 1
+    TimeResyncInterval: 30
+    EnableNetworkedVar: 1
+    EnsureNetworkedVarLengthSafety: 0
+    EnableSceneManagement: 0
+    ForceSamePrefabs: 1
+    UsePrefabSync: 0
+    RecycleNetworkIds: 1
+    NetworkIdRecycleDelay: 120
+    RpcHashSize: 0
+    LoadSceneTimeOut: 120
+    EnableMessageBuffering: 1
+    MessageBufferTimeout: 20
+    EnableNetworkLogs: 1
+    EnableEncryption: 0
+    SignKeyExchange: 0
+    ServerBase64PfxCertificate: 
+--- !u!114 &3237420759792123385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3237420759792123387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 934251302f20941489bf52429c0a3cdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MessageBufferSize: 5120
+  MaxConnections: 100
+  ConnectAddress: 127.0.0.1
+  ConnectPort: 7777
+  ServerListenPort: 7777
+  ServerWebsocketListenPort: 8887
+  SupportWebsocket: 0
+  Channels: []
+  UseMLAPIRelay: 0
+  MLAPIRelayAddress: 184.72.104.138
+  MLAPIRelayPort: 8888
+--- !u!114 &3237420759792123386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3237420759792123387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a9cad742d2191844acc2c65d31b7fbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkingManager: {fileID: 3237420759792123384}
+  unetTransport: {fileID: 3237420759792123385}

@@ -106,7 +106,8 @@ GameObject:
   - component: {fileID: 8680106322394880023}
   - component: {fileID: 3210753516864200833}
   - component: {fileID: 2725135351301487652}
-  - component: {fileID: -8051961672673655590}
+  - component: {fileID: -8111079885203484663}
+  - component: {fileID: -2116085088977084565}
   m_Layer: 0
   m_Name: Enemy3
   m_TagString: Untagged
@@ -158,11 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28aead1ae684b4a4d96f603a3dd621ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyMover:
-    moveSpeed: 10
-    rotationSpeed: 2
-    minMoveNextPointDistance: 5
---- !u!114 &-8051961672673655590
+--- !u!114 &-8111079885203484663
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -174,8 +171,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b0f914b63f32a48b3192e975a19bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bufferWaitTime: 0.3
-  networkedObject: {fileID: 3210753516864200833}
+  bufferWaitTime: 0.5
+--- !u!114 &-2116085088977084565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2585391232709703839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f5cb05494e6fad45a3f23696a37c2bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
+  rotationSpeed: 2
+  minMoveNextPointDistance: 5
 --- !u!1 &6132907129967002214
 GameObject:
   m_ObjectHideFlags: 0
