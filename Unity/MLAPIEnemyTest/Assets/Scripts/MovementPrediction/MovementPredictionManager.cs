@@ -19,7 +19,7 @@ public class MovementPredictionManager : NetworkedBehaviour
     private int dropPackCount = 0;
     private byte movementNetworkIdCounter = 0;
 
-    private Dictionary<byte, MovementPredictionHandler> handlers = new Dictionary<byte, MovementPredictionHandler>();
+    private Dictionary<byte, MovementPrediction> handlers = new Dictionary<byte, MovementPrediction>();
 
     public static MovementPredictionManager Instance { get; private set; }
 
@@ -42,7 +42,7 @@ public class MovementPredictionManager : NetworkedBehaviour
         SendMovementDataUpdate();
     }
 
-    public byte AddHandlerOnServer(MovementPredictionHandler predictionHandler)
+    public byte AddHandlerOnServer(MovementPrediction predictionHandler)
     {
         byte movementNetworkId = movementNetworkIdCounter;
 
@@ -53,7 +53,7 @@ public class MovementPredictionManager : NetworkedBehaviour
         return movementNetworkId;
     }
 
-    public void AddHandlerOnClient(byte movementNetworkId , MovementPredictionHandler predictionHandler)
+    public void AddHandlerOnClient(byte movementNetworkId , MovementPrediction predictionHandler)
     {
         handlers.Add(movementNetworkId, predictionHandler);
     }

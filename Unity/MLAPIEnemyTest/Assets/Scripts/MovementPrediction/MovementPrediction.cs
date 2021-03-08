@@ -5,15 +5,34 @@ using MLAPI;
 using MLAPI.Serialization.Pooled;
 using MLAPI.Messaging;
 using System.IO;
+using MLAPI.NetworkedVar;
 
 public class MovementPrediction : NetworkedBehaviour
 {
     private float nextSendTime = 0;
     private int dropPackCount = 0;
-    private float lastTimeStamp = 0;
     private Queue<MovementData> buffer = new Queue<MovementData>();
     private MovementData? moveFromData = null;
     private MovementData? moveToData = null;
+
+    private NetworkedVar<byte> movementNetworkId = new NetworkedVar<byte>();
+
+    private IEnumerator Start()
+    {
+        while (MovementPredictionManager == null)
+            yield return null;
+
+        if (NetworkedObject.IsOwner)
+            movementNetworkId.Value = MovementPredictionManager.AddHandlerOnServer(this);
+        else
+            MovementPredictionManager.AddHandlerOnClient(movementNetworkId.Value, this);
+    }
+
+    private void OnDestroy()
+    {
+        if (MovementPredictionManager != null)
+            MovementPredictionManager.RemoveHandler(movementNetworkId.Value);
+    }
 
     private void Update()
     {
@@ -79,6 +98,17 @@ public class MovementPrediction : NetworkedBehaviour
             movementData.position = reader.ReadVector3Packed();
             movementData.rotation = reader.ReadRotationPacked();
         }
+
+        buffer.Enqueue(movementData);
+    }
+
+    public void AddMovementDataToBuffer(float timeStamp, Vector3 position, Quaternion rotation)
+    {
+        MovementData movementData = new MovementData();
+
+        movementData.timeStamp = timeStamp + GameSettingsData.bufferWaitTime;
+        movementData.position = position;
+        movementData.rotation = rotation;
 
         buffer.Enqueue(movementData);
     }
@@ -161,4 +191,5 @@ public class MovementPrediction : NetworkedBehaviour
 
     private float NetworkTime => NetworkingManager.Singleton.NetworkTime;
     private GameSettingsData GameSettingsData => GameSettingsManager.Instance.Settings;
+    private MovementPredictionManager MovementPredictionManager => MovementPredictionManager.Instance;
 }
