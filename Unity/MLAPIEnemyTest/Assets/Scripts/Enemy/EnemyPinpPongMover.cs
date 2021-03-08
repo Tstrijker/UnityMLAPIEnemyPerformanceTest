@@ -1,46 +1,47 @@
-using MLAPI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyTestMover : NetworkedBehaviour
+[Serializable]
+public class EnemyPinpPongMover
 {
     [SerializeField] private float moveSpeed = 10;
     [SerializeField] private Vector3 startPosition = new Vector3(80, 0, 0);
     [SerializeField] private Vector3 endPosition = new Vector3(-80, 0, 0);
     [SerializeField] private float turnAroundDistance = 1;
 
+    private Transform localTransform;
     private Vector3 targetPosition;
     private float turnAroundDistanceSqr;
     private bool movingToEndPoint;
 
-    private void Awake()
+    public void Setup(Transform localTransform)
     {
-        if (IsServer)
-            transform.position = startPosition;
+        this.localTransform = localTransform;
+        
+        localTransform.position = startPosition;
 
         turnAroundDistanceSqr = turnAroundDistance * turnAroundDistance;
 
         targetPosition = endPosition;
         movingToEndPoint = true;
-        transform.LookAt(targetPosition);
+
+        localTransform.LookAt(targetPosition);
     }
 
-    private void Update()
+    public void Update()
     {
-        if (!IsServer)
-            return;
-
         MoveUpdate();
     }
 
     private void MoveUpdate()
     {
-        Vector3 position = transform.position;
+        Vector3 position = localTransform.position;
 
         Vector3 newPosition = Vector3.MoveTowards(position, targetPosition, moveSpeed * Time.deltaTime);
 
-        transform.position = newPosition;
+        localTransform.position = newPosition;
 
         if ((targetPosition - newPosition).sqrMagnitude < turnAroundDistanceSqr)
         {
@@ -55,7 +56,7 @@ public class EnemyTestMover : NetworkedBehaviour
                 movingToEndPoint = true;
             }
 
-            transform.LookAt(targetPosition);
+            localTransform.LookAt(targetPosition);
         }
     }
 }

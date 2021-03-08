@@ -100,11 +100,6 @@ public class MovementPredictionCubicHermiteSpline : NetworkedBehaviour
     [ClientRPC]
     private void ClientReceivedMovementDataRPC(ulong clientId, Stream stream)
     {
-        if (lastTimeStamp == Time.time)
-            return;
-
-        lastTimeStamp = Time.time;
-
         MovementData movementData = new MovementData();
 
         using (PooledBitReader reader = PooledBitReader.Get(stream))

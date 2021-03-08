@@ -16,11 +16,13 @@ public class GameFlowManager : Singleton<GameFlowManager>
     private CancellationTokenSource cts = new CancellationTokenSource();
     private static Scene enemyScene;
 
-    public async void StartServerGame(MovementPredictionTypes movementPredictionType)
+    public async void StartServerGame()
     {
         CancellationToken ct = cts.Token;
 
         await ShowLoadingScene(ct);
+
+        CreateEnemyPoolScene();
 
         bool connectionSuccessfull = await NetworkConnectionManager.CreateServer(ct);
 
@@ -35,7 +37,7 @@ public class GameFlowManager : Singleton<GameFlowManager>
         await LoadScene(gameMenuSceneName, ct);
 
         await EnemyManager.AsyncWaitForLoaded(ct);
-        await EnemyManager.LoadEnemiesPool(movementPredictionType, ct);
+        await EnemyManager.LoadEnemiesPool(ct);
 
         await HideLoadingScene(ct);
     }

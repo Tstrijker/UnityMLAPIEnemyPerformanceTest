@@ -2,37 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using MLAPI;
 
-public class EnemyRandomMover : NetworkedBehaviour
+[Serializable]
+public class EnemyRandomMover
 {
     [SerializeField] private float moveSpeed = 10;
     [SerializeField] private float rotationSpeed = 2f;
-    [SerializeField] private float minMoveNextPointDistance = 5; 
+    [SerializeField] private float minMoveNextPointDistance = 5;
 
+    private Transform localTransform;
     private Vector3 enemyPosition;
     private Vector3 moveToPoint;
     private float minMoveNextPointDistanceSqr;
 
-    public void Awake()
+    public void Setup(Transform localTransform)
     {
-        minMoveNextPointDistanceSqr = minMoveNextPointDistance * minMoveNextPointDistance;
-    }
+        this.localTransform = localTransform;
 
-    private IEnumerator Start()
-    {
-        yield return EnemyManager.WaitForLoaded();
+        minMoveNextPointDistanceSqr = minMoveNextPointDistance * minMoveNextPointDistance;
 
         moveToPoint = EnemyManager.GetRandomSpawnAreaPoint();
-
     }
 
-    private void Update()
+    public void Update()
     {
-        if (!IsServer)
-            return;
-
-        enemyPosition = transform.position;
+        enemyPosition = localTransform.position;
 
         RandomMoveToPointUpdate();
         MoveToPoint();
@@ -51,12 +45,12 @@ public class EnemyRandomMover : NetworkedBehaviour
         Vector3 targetDirection = moveToPoint - enemyPosition;
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
-        Quaternion newRotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        Quaternion newRotation = Quaternion.Slerp(localTransform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         Vector3 rotationForward = newRotation * Vector3.forward;
 
         Vector3 newPosition = enemyPosition + (rotationForward * moveSpeed * Time.deltaTime);
 
-        transform.SetPositionAndRotation(newPosition, newRotation);
+        localTransform.SetPositionAndRotation(newPosition, newRotation);
     }
 
     private EnemyManager EnemyManager => EnemyManager.Instance;

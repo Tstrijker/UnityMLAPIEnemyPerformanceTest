@@ -8,41 +8,39 @@ using UnityEngine.SceneManagement;
 
 public class EnemyManager : SceneSingleton<EnemyManager>
 {
-    [SerializeField] private Enemy enemyMLAPIPredictionMovementPrefab = default;
-    [SerializeField] private Enemy enemySinglePredictionMovementPrefab2 = default;
-    [SerializeField] private Enemy enemyGroupedPredictionMovementPrefab3 = default;
-    [SerializeField] private int poolSize = 100;
+    [SerializeField] private Enemy enemyMLAPINetworkedTransformPrefab = default;
+    [SerializeField] private Enemy enemyPredictionMovementPrefab = default;
     [SerializeField] private Bounds spawnAreaSize = default;
     [SerializeField] private MovementPredictionManager movementPredictionManagerPrefab = default;
 
-    public async UniTask LoadEnemiesPool(MovementPredictionTypes movementPredictionType, CancellationToken ct)
+    public async UniTask LoadEnemiesPool(CancellationToken ct)
     {
         Enemy enemyPrefab = null;
 
-        switch (movementPredictionType)
+        switch (GameSettingsData.predictionType)
         {
-            case MovementPredictionTypes.MLAPIPredictionMovement:
-                enemyPrefab = enemyMLAPIPredictionMovementPrefab;
+            case MovementPredictionTypes.MLAPINetworkedTransform:
+                enemyPrefab = enemyMLAPINetworkedTransformPrefab;
                 break;
 
-            case MovementPredictionTypes.SinglePredictionMovement:
-                enemyPrefab = enemySinglePredictionMovementPrefab2;
-                break;
+            case MovementPredictionTypes.Linear:
+            case MovementPredictionTypes.CubicHermite:
+                if (GameSettingsData.movementPredictionData == MovementPredictionDataTypes.Grouped)
+                {
+                    MovementPredictionManager movementPredictionManager = Instantiate(movementPredictionManagerPrefab);
+                    movementPredictionManager.NetworkedObject.Spawn();
+                }
 
-            case MovementPredictionTypes.GroupedPredictionMovement:
-                MovementPredictionManager movementPredictionManager = Instantiate(movementPredictionManagerPrefab);
-                movementPredictionManager.NetworkedObject.Spawn();
-
-                enemyPrefab = enemyGroupedPredictionMovementPrefab3;
+                enemyPrefab = enemyPredictionMovementPrefab;
                 break;
         }
 
-        for (int i = 0; i < poolSize; i++)
+        for (int i = 0; i < GameSettingsData.spawnNumberOfEnemies; i++)
         {
             Vector3 spawnPoint = GetRandomSpawnAreaPoint();
             Quaternion rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
 
-            Enemy newEnemy = Instantiate<Enemy>(enemyPrefab, spawnPoint, rotation);
+            Enemy newEnemy = Instantiate(enemyPrefab, spawnPoint, rotation);
 
             newEnemy.NetworkedObject.Spawn();
 
@@ -54,4 +52,6 @@ public class EnemyManager : SceneSingleton<EnemyManager>
     {
         return spawnAreaSize.GetRandomVector3();
     }
+
+    private GameSettingsData GameSettingsData => GameSettingsManager.Instance.Settings;
 }

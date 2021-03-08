@@ -8,14 +8,6 @@ using System.IO;
 
 public class MovementPrediction : NetworkedBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] private int sendRatePerSecond = default;
-    [SerializeField] private float bufferWaitTime = default;
-
-    [Header("Test features")]
-    [SerializeField] private bool dropPackages = default;
-    [SerializeField] private int dropEachPackCount = default;
-
     private float nextSendTime = 0;
     private int dropPackCount = 0;
     private float lastTimeStamp = 0;
@@ -25,7 +17,9 @@ public class MovementPrediction : NetworkedBehaviour
 
     private void Update()
     {
-        SendMovementDataUpdate();
+        if (GameSettingsData.movementPredictionData == MovementPredictionDataTypes.Local)
+            SendMovementDataUpdate();
+
         MoveUpdate();
     }
 
@@ -40,7 +34,7 @@ public class MovementPrediction : NetworkedBehaviour
         if (Time.time < nextSendTime)
             return;
 
-        nextSendTime = Time.time + (1f / sendRatePerSecond);
+        nextSendTime = Time.time + (1f / GameSettingsData.sendRatePerSecond);
 
         using (PooledBitStream stream = PooledBitStream.Get())
         {
@@ -58,9 +52,9 @@ public class MovementPrediction : NetworkedBehaviour
     [ServerRPC]
     private void ServerReceivedMovementDataRPC(ulong clientId, Stream stream)
     {
-        if (dropPackages)
+        if (GameSettingsData.simulateDropingPackages)
         {
-            if (dropPackCount >= dropEachPackCount)
+            if (dropPackCount >= GameSettingsData.dropEachSetNumberPackage)
             {
                 dropPackCount = 0;
                 return;
@@ -79,14 +73,9 @@ public class MovementPrediction : NetworkedBehaviour
     {
         MovementData movementData = new MovementData();
 
-        //if (lastTimeStamp == Time.time)
-        //    return;
-
-        //lastTimeStamp = Time.time;
-
         using (PooledBitReader reader = PooledBitReader.Get(stream))
         {
-            movementData.timeStamp = reader.ReadSinglePacked() + bufferWaitTime;
+            movementData.timeStamp = reader.ReadSinglePacked() + GameSettingsData.bufferWaitTime;
             movementData.position = reader.ReadVector3Packed();
             movementData.rotation = reader.ReadRotationPacked();
         }
@@ -129,10 +118,47 @@ public class MovementPrediction : NetworkedBehaviour
 
         Vector3 newPosition = Vector3.Lerp(moveFromData.Value.position, moveToData.Value.position, normalMoveTime);
 
+        if (GameSettingsData.predictionType == MovementPredictionTypes.Linear)
+        {
+            newPosition = Vector3.Lerp(
+                moveFromData.Value.position, 
+                moveToData.Value.position, 
+                normalMoveTime);
+        }
+        else if (GameSettingsData.predictionType == MovementPredictionTypes.CubicHermite)
+        {
+            Vector3 moveFromTangent = moveFromData.Value.velocity * deltaMoveTime;
+            Vector3 moveToDataangent = moveToData.Value.velocity * deltaMoveTime;
+
+            newPosition = GetHermiteUnitInterval(
+            moveFromData.Value.position,
+            moveToData.Value.position,
+            moveFromTangent,
+            moveToDataangent,
+            normalMoveTime);
+        }
+
         Quaternion newRotation = Quaternion.Lerp(moveFromData.Value.rotation, moveToData.Value.rotation, normalMoveTime);
         
         transform.SetPositionAndRotation(newPosition, newRotation);
     }
 
+    private Vector3 GetHermiteUnitInterval(
+        Vector3 aP,
+        Vector3 bP,
+        Vector3 aT,
+        Vector3 bT,
+        float t)
+    {
+        float t2 = t * t;
+        float t3 = t2 * t;
+
+        return (2f * t3 - 3f * t2 + 1f) * aP
+            + (t3 - 2f * t2 + t) * aT
+            + (-2f * t3 + 3f * t2) * bP
+            + (t3 - t2) * bT;
+    }
+
     private float NetworkTime => NetworkingManager.Singleton.NetworkTime;
+    private GameSettingsData GameSettingsData => GameSettingsManager.Instance.Settings;
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum MovementPredictionTypes
 {
-    MLAPIPredictionMovement,
-    SinglePredictionMovement,
-    GroupedPredictionMovement,
+    MLAPINetworkedTransform,
+    Linear,
+    CubicHermite,
 }
